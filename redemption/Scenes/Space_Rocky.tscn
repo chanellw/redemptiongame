@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://pulekot0sums"]
+
+[ext_resource type="Script" path="res://Scenes/space_rocky.gd" id="1_j1cv2"]
+[ext_resource type="Texture2D" uid="uid://c7bydwa7cbppe" path="res://Sprites/icon.svg" id="1_t0nn7"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i2p2i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_t0nn7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dl023"]
+radius = 14.0
+height = 44.0
+
+[node name="Space Rocky" type="CharacterBody2D"]
+script = ExtResource("1_j1cv2")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+position = Vector2(415, 207)
+scale = Vector2(0.210938, 0.34375)
+sprite_frames = SubResource("SpriteFrames_i2p2i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(415, 207)
+shape = SubResource("CapsuleShape2D_dl023")
