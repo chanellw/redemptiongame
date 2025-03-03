@@ -13,6 +13,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+	
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -21,5 +22,12 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-
+	
+	# Handle light attack.
+	if Input.is_action_just_pressed("Light"):
+		pass
+	# Handle medium attack.
+	if Input.is_action_just_pressed("Medium"):
+		pass
+	# Hand;e heavy attack.
 	move_and_slide()
