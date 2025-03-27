@@ -7,7 +7,7 @@ const JUMP_VELOCITY = -400.0
 var jump_count = 0
 var max_jump = 2
 var buttons_pressed : String = ""
-
+var AttackPoints = 0
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -31,8 +31,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
-	
-	# Handle light attack.
+
+func _unhandled_input(event: InputEvent) -> void:
+		# Handle light attack.
 	if Input.is_action_just_pressed("Light"):
 		buttons_pressed += "Light"
 	# Handle medium attack.
@@ -41,5 +42,15 @@ func _physics_process(delta: float) -> void:
 	# Handle heavy attack.
 	if Input.is_action_just_pressed("Heavy"):
 		buttons_pressed += "Heavy"
+		
+		
+func _combos():
+	if "upLight" in buttons_pressed:
+		$AnimatedSprite2D2.play("attack")
+		buttons_pressed = ""
+			
+	if "leftrightleftright" in buttons_pressed:
+		$AnimatedSprite2D2.play("attack2")
+		buttons_pressed = ""
 	
 	move_and_slide()
