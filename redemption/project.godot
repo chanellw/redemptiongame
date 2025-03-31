@@ -42,6 +42,11 @@ Jump={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Solid Ledges"
+2d_physics/layer_2="Platforms"
+
 [rendering]
 
 renderer/rendering_method="mobile"

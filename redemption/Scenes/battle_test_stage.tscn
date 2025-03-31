@@ -36,22 +36,27 @@ offset_right = 599.0
 offset_bottom = 212.0
 
 [node name="Platforms" type="StaticBody2D" parent="." groups=["one_way_platform"]]
+collision_layer = 2
 script = ExtResource("1_q6ac6")
 
 [node name="Platform" type="CollisionShape2D" parent="Platforms" groups=["one_way_platform"]]
+visibility_layer = 2
 position = Vector2(387, 288.5)
 shape = SubResource("RectangleShape2D_20c23")
 
 [node name="Platform2" type="CollisionShape2D" parent="Platforms" groups=["one_way_platform"]]
+visibility_layer = 2
 position = Vector2(707, 289)
 shape = SubResource("RectangleShape2D_20c23")
 
 [node name="Platform3" type="CollisionShape2D" parent="Platforms" groups=["one_way_platform"]]
+visibility_layer = 2
 position = Vector2(532, 207)
 shape = SubResource("RectangleShape2D_20c23")
 
 [node name="Space Rocky" parent="." instance=ExtResource("1_bhcms")]
-position = Vector2(118, -38)
+position = Vector2(517, 80)
+collision_mask = 3
 
 [node name="ground" type="StaticBody2D" parent="."]
 
