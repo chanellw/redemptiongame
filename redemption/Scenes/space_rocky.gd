@@ -1,56 +1,20 @@
 extends CharacterBody2D
 
-
+const LEDGE_GRAB_COOLDOWN = 0.3  
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
+const MAX_LEDGE_GRABS = 5  
 
-var jump_count = 0
-var max_jump = 2
-var buttons_pressed : String = ""
-var AttackPoints = 0
+var gravity
+var ledge_grab_count = 0  
+var is_grabbing_ledge = false
+var ledge_position = Vector2.ZERO
+var dropping_through_platform = false
+var ledge_grab_cooldown_timer = 0.0  
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-	
-	# Count of how many jumps have been done so far. 
-	if is_on_floor():
-		jump_count = 0
-		
-	# Handle jump.
-	if Input.is_action_just_pressed("Jump") and jump_count < max_jump:
-		velocity.y = JUMP_VELOCITY
-		jump_count += 1
-		
-	
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("Left", "Right")
-	if direction:
-		velocity.x = direction * SPEED
+
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		get_input(delta)
+		if not is_on_floor() and not dropping_through_platform:
+			velocity.y += gravity * delta  
 
-func _unhandled_input(event: InputEvent) -> void:
-		# Handle light attack.
-	if Input.is_action_just_pressed("Light"):
-		buttons_pressed += "Light"
-	# Handle medium attack.
-	if Input.is_action_just_pressed("Medium"):
-		buttons_pressed += "Medium"
-	# Handle heavy attack.
-	if Input.is_action_just_pressed("Heavy"):
-		buttons_pressed += "Heavy"
-		
-		
-func _combos():
-	if "upLight" in buttons_pressed:
-		$AnimatedSprite2D2.play("attack")
-		buttons_pressed = ""
-			
-	if "leftrightleftright" in buttons_pressed:
-		$AnimatedSprite2D2.play("attack2")
-		buttons_pressed = ""
-	
-	move_and_slide()
