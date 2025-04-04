@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://pulekot0sums"]
+[gd_scene load_steps=6 format=3 uid="uid://pulekot0sums"]
 
 [ext_resource type="Script" path="res://Scenes/space_rocky.gd" id="1_j1cv2"]
 [ext_resource type="Texture2D" uid="uid://c7bydwa7cbppe" path="res://Sprites/icon.svg" id="1_t0nn7"]
@@ -18,8 +18,11 @@ animations = [{
 radius = 14.0
 height = 44.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5vmj"]
+size = Vector2(28, 3)
+
 [node name="Space Rocky" type="CharacterBody2D"]
-collision_layer = 3
+collision_mask = 3
 script = ExtResource("1_j1cv2")
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
@@ -36,3 +39,13 @@ target_position = Vector2(-10, -10)
 [node name="LedgeCheckRayRight" type="RayCast2D" parent="."]
 position = Vector2(10, -10)
 target_position = Vector2(10, -10)
+
+[node name="PlatformCheck" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="PlatformChecking" type="CollisionShape2D" parent="PlatformCheck"]
+position = Vector2(0, 22.5)
+shape = SubResource("RectangleShape2D_m5vmj")
+
+[connection signal="body_entered" from="PlatformCheck" to="." method="_on_platform_check_body_entered"]
