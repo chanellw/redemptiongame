@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfsayq422noao"]
+[gd_scene load_steps=8 format=3 uid="uid://cfsayq422noao"]
 
 [ext_resource type="PackedScene" uid="uid://pulekot0sums" path="res://Scenes/Space_Rocky.tscn" id="1_bhcms"]
 [ext_resource type="Script" path="res://Scenes/platforms.gd" id="1_q6ac6"]
@@ -8,6 +8,18 @@ size = Vector2(134, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oh8el"]
 size = Vector2(597.5, 278.75)
+
+[sub_resource type="Animation" id="Animation_j2bjs"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_kwbvm"]
+resource_name = "attack"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_657v4"]
+_data = {
+"attack": SubResource("Animation_kwbvm"),
+"idle": SubResource("Animation_j2bjs")
+}
 
 [node name="Battle Test Stage" type="Node2D"]
 
@@ -56,10 +68,5 @@ position = Vector2(532, 207)
 shape = SubResource("RectangleShape2D_20c23")
 
 [node name="Space Rocky" parent="." instance=ExtResource("1_bhcms")]
-position = Vector2(517, 80)
 
-[node name="ground" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ground"]
-position = Vector2(551.25, 508.25)
-shape = SubResource("RectangleShape2D_oh8el")
