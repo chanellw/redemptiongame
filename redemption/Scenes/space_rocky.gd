@@ -4,6 +4,7 @@ const LEDGE_GRAB_COOLDOWN = 0.3
 const SPEED = 300.0
 const JUMP_VELOCITY = -400.0
 const MAX_LEDGE_GRABS = 5  
+const FAST_FALL_MULTIPLIER = 2.5  # Gravity multiplier for fast fall
 
 var gravity
 var ledge_grab_count = 0  
@@ -11,10 +12,12 @@ var is_grabbing_ledge = false
 var ledge_position = Vector2.ZERO
 var dropping_through_platform = false
 var ledge_grab_cooldown_timer = 0.0  
+var is_fast_falling = false  
+var can_double_jump = true  # <-- new
 
 @onready var ledge_check_left = $LedgeCheckRayLeft
 @onready var ledge_check_right = $LedgeCheckRayRight
-@onready var collision_shape = $CollisionShape2D  # Make sure this references your collision shape
+@onready var collision_shape = $CollisionShape2D  
 
 func _ready():
 	gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -29,29 +32,27 @@ func _physics_process(delta):
 		handle_ledge_hang()
 	else:
 		get_input(delta)
-		if not is_on_floor() and not dropping_through_platform:
-			velocity.y += gravity * delta  
+		apply_gravity(delta)
 
 	handle_ledge_grab()
 	move_and_slide()
 
-	# Reset ledge grab count when landing on solid ground
 	if is_on_floor():
 		ledge_grab_count = 0
 		dropping_through_platform = false  
+		is_fast_falling = false  
+		can_double_jump = true  # <-- Reset double jump on ground
 
 func get_input(delta):
-	var direction = 0  # Default to no movement
+	var direction = 0  
 
-	# Left & Right Movement
 	if Input.is_action_pressed("Left"):
 		direction = -1
 	elif Input.is_action_pressed("Right"):
 		direction = 1
 	
-	velocity.x = direction * SPEED  # Apply horizontal movement
+	velocity.x = direction * SPEED  
 
-	# Jumping
 	if Input.is_action_just_pressed("Jump"):
 		if is_grabbing_ledge:
 			is_grabbing_ledge = false
@@ -59,20 +60,33 @@ func get_input(delta):
 			ledge_grab_cooldown_timer = LEDGE_GRAB_COOLDOWN  
 		elif is_on_floor():
 			velocity.y = JUMP_VELOCITY
+		elif can_double_jump:
+			velocity.y = JUMP_VELOCITY
+			can_double_jump = false  # Use the double jump
 
-	# Drop-through platform mechanic (only activates on one-way platforms)
+	if Input.is_action_pressed("Down") and not is_on_floor():
+		is_fast_falling = true
+	else:
+		is_fast_falling = false  
+
 	if Input.is_action_just_pressed("Down") and is_on_floor():
 		var collision = get_last_slide_collision()
 		if collision and collision.get_collider() and collision.get_collider().is_in_group("one_way_platform"):
 			drop_through_platform()
 
+func apply_gravity(delta):
+	if not is_on_floor() and not dropping_through_platform:
+		if is_fast_falling:
+			velocity.y += gravity * FAST_FALL_MULTIPLIER * delta
+		else:
+			velocity.y += gravity * delta
+
 func drop_through_platform():
 	if not dropping_through_platform:
 		dropping_through_platform = true
-		collision_shape.set_deferred("disabled", true)  # Disable collision to pass through
-		get_tree().create_timer(0.2).timeout.connect(_enable_collision)  # Restore collision after short delay
+		collision_shape.set_deferred("disabled", true)  
+		get_tree().create_timer(0.2).timeout.connect(_enable_collision)  
 
-# Re-enable collision after drop-through
 func _enable_collision():
 	collision_shape.set_deferred("disabled", false)  
 	dropping_through_platform = false  
@@ -92,7 +106,8 @@ func handle_ledge_grab():
 		velocity = Vector2.ZERO  
 		ledge_position = position
 		position.y -= 5  
-		ledge_grab_count += 1  
+		ledge_grab_count += 1
+		can_double_jump = true  # <-- Reset double jump when grabbing ledge
 
 func handle_ledge_hang():
 	velocity = Vector2.ZERO  
