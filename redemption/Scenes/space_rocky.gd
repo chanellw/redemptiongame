@@ -13,19 +13,14 @@ var ledge_position = Vector2.ZERO
 var dropping_through_platform = false
 var ledge_grab_cooldown_timer = 0.0  
 var is_fast_falling = false  
-var can_double_jump = true  # <-- new
-<<<<<<< Updated upstream
+var can_double_jump = true
 
 
-@onready var ledge_check_left = $LedgeCheckRayLeft
-@onready var ledge_check_right = $LedgeCheckRayRight
-@onready var collision_shape = $CollisionShape2D  
-=======
->>>>>>> Stashed changes
 
 @onready var ledge_check_left = $LedgeCheckRayLeft
 @onready var ledge_check_right = $LedgeCheckRayRight
 @onready var collision_shape = $CollisionShape2D  
+
 
 func _ready():
 	gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -41,10 +36,7 @@ func _physics_process(delta):
 	else:
 		get_input(delta)
 		apply_gravity(delta)
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 
 	handle_ledge_grab()
 	move_and_slide()
