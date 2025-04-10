@@ -29,9 +29,11 @@ var dash_timer = 0.0
 var dash_direction = Vector2.ZERO
 var can_air_dash = true
 
+
 @onready var ledge_check_left = $LedgeCheckRayLeft
 @onready var ledge_check_right = $LedgeCheckRayRight
 @onready var collision_shape = $CollisionShape2D  
+
 
 func _ready():
 	gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -48,6 +50,7 @@ func _physics_process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 	else:
+
 		if is_grabbing_wall:
 			handle_wall_hang()
 			wall_grab_timer += delta
@@ -56,6 +59,11 @@ func _physics_process(delta):
 		else:
 			get_input()
 			apply_gravity(delta)
+
+		get_input(delta)
+		apply_gravity(delta)
+
+
 
 	handle_wall_grab()
 	move_and_slide()

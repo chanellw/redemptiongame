@@ -58,8 +58,10 @@ shape = SubResource("RectangleShape2D_20c23")
 [node name="Space Rocky" parent="." instance=ExtResource("1_bhcms")]
 position = Vector2(517, 80)
 
+
 [node name="ground" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ground"]
 position = Vector2(551.25, 508.25)
 shape = SubResource("RectangleShape2D_oh8el")
+
