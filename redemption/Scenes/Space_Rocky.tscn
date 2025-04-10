@@ -34,11 +34,11 @@ shape = SubResource("CapsuleShape2D_dl023")
 
 [node name="LedgeCheckRayLeft" type="RayCast2D" parent="."]
 position = Vector2(-10, -10)
-target_position = Vector2(-10, -10)
+target_position = Vector2(-5, -8)
 
 [node name="LedgeCheckRayRight" type="RayCast2D" parent="."]
 position = Vector2(10, -10)
-target_position = Vector2(10, -10)
+target_position = Vector2(5, -8)
 
 [node name="PlatformCheck" type="Area2D" parent="."]
 collision_layer = 2
