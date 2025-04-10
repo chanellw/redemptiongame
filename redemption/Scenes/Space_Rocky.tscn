@@ -29,3 +29,22 @@ sprite_frames = SubResource("SpriteFrames_i2p2i")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(415, 207)
 shape = SubResource("CapsuleShape2D_dl023")
+
+[node name="LedgeCheckRayLeft" type="RayCast2D" parent="."]
+position = Vector2(-10, -10)
+target_position = Vector2(-5, -8)
+
+[node name="LedgeCheckRayRight" type="RayCast2D" parent="."]
+position = Vector2(10, -10)
+target_position = Vector2(5, -8)
+
+[node name="PlatformCheck" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="PlatformChecking" type="CollisionShape2D" parent="PlatformCheck"]
+position = Vector2(0, 22.5)
+shape = SubResource("RectangleShape2D_m5vmj")
+
+[connection signal="body_entered" from="PlatformCheck" to="." method="_on_platform_check_body_entered"]
+
