@@ -1,13 +1,72 @@
-[gd_scene load_steps=5 format=3 uid="uid://pulekot0sums"]
+[gd_scene load_steps=16 format=3 uid="uid://pulekot0sums"]
 
-[ext_resource type="Script" path="res://Scenes/space_rocky.gd" id="1_j1cv2"]
-[ext_resource type="Texture2D" uid="uid://c7bydwa7cbppe" path="res://Sprites/icon.svg" id="1_t0nn7"]
+[ext_resource type="Script" path="res://Scripts/space_rocky.gd" id="1_j1cv2"]
+[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab1and5.png" id="2_beiti"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking1.png" id="2_xtx5q"]
+[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab2and4.png" id="3_ayruq"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking2.png" id="3_c8vdi"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking3.png" id="4_boipv"]
+[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab3.png" id="4_v80st"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking4.png" id="5_vsb75"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking5.png" id="6_p0y4a"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking6.png" id="7_hh414"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking7.png" id="8_k5gs3"]
+[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking8.png" id="9_in82x"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_i2p2i"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_t0nn7")
+"texture": ExtResource("2_beiti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ayruq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_v80st")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ayruq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_beiti")
+}],
+"loop": true,
+"name": &"Light",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xtx5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_c8vdi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_boipv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_vsb75")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_p0y4a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_hh414")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_k5gs3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_in82x")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xtx5q")
 }],
 "loop": true,
 "name": &"default",
@@ -15,27 +74,32 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dl023"]
-radius = 14.0
-height = 44.0
+radius = 8.0
+height = 38.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5vmj"]
+size = Vector2(16, 3.5)
 
 [node name="Space Rocky" type="CharacterBody2D"]
+collision_mask = 3
 script = ExtResource("1_j1cv2")
 
-[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
-position = Vector2(415, 207)
-scale = Vector2(0.210938, 0.34375)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -6)
+scale = Vector2(0.19401, 0.146484)
 sprite_frames = SubResource("SpriteFrames_i2p2i")
+animation = &"Light"
+frame_progress = 0.85838
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(415, 207)
 shape = SubResource("CapsuleShape2D_dl023")
 
 [node name="LedgeCheckRayLeft" type="RayCast2D" parent="."]
-position = Vector2(-10, -10)
+position = Vector2(-8, -10)
 target_position = Vector2(-5, -8)
 
 [node name="LedgeCheckRayRight" type="RayCast2D" parent="."]
-position = Vector2(10, -10)
+position = Vector2(8, -10)
 target_position = Vector2(5, -8)
 
 [node name="PlatformCheck" type="Area2D" parent="."]
@@ -43,8 +107,7 @@ collision_layer = 2
 collision_mask = 3
 
 [node name="PlatformChecking" type="CollisionShape2D" parent="PlatformCheck"]
-position = Vector2(0, 22.5)
+position = Vector2(0, 18.25)
 shape = SubResource("RectangleShape2D_m5vmj")
 
 [connection signal="body_entered" from="PlatformCheck" to="." method="_on_platform_check_body_entered"]
-
