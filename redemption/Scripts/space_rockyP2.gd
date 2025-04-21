@@ -71,6 +71,42 @@ func _physics_process(delta):
 		wall_grab_timer = 0.0
 		wall_grab_delay_timer = 0.0
 
+func respawn():
+	# Move to spawn point first
+	position = original_spawn_position
+	velocity = Vector2.ZERO
+	move_and_slide()  # Ensure immediate repositioning logic takes effect
+
+	# Hide and disable player
+	visible = false
+	set_physics_process(false)
+	set_collision_layer(0)
+	set_collision_mask(0)
+
+	# Wait 2 seconds while hidden
+	await get_tree().create_timer(2.0).timeout
+
+	# Start flashing for 3 seconds
+	var flash_time = 3.0
+	var flash_interval = 0.2
+	var timer = 0.0
+
+	set_physics_process(true)
+	set_collision_layer(1)
+	set_collision_mask(1)
+
+	while timer < flash_time:
+		visible = true
+		modulate.a = 0.3  # Semi-transparent
+		await get_tree().create_timer(flash_interval / 2).timeout
+		modulate.a = 1.0  # Fully visible
+		await get_tree().create_timer(flash_interval / 2).timeout
+		timer += flash_interval
+
+	# Finish flashing
+	modulate.a = 1.0
+	visible = true
+
 func get_input():
 	var direction = 0
 	if Input.is_action_pressed("LeftP2"):

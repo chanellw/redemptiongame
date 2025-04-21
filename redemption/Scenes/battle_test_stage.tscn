@@ -77,22 +77,22 @@ shape = SubResource("RectangleShape2D_20c23")
 position = Vector2(551.25, 508.25)
 shape = SubResource("RectangleShape2D_oh8el")
 
-[node name="OutOfBounds" type="StaticBody2D" parent="."]
+[node name="KillBox" type="Area2D" parent="."]
 position = Vector2(18, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="OutOfBounds"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillBox"]
 position = Vector2(532, -198)
 shape = SubResource("RectangleShape2D_s5o30")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="OutOfBounds"]
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="KillBox"]
 position = Vector2(532, 777)
 shape = SubResource("RectangleShape2D_s5o30")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="OutOfBounds"]
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="KillBox"]
 position = Vector2(-311, 289.5)
 shape = SubResource("RectangleShape2D_pdp8a")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="OutOfBounds"]
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="KillBox"]
 position = Vector2(1375, 289)
 shape = SubResource("RectangleShape2D_pdp8a")
 
@@ -104,3 +104,5 @@ position = Vector2(-185, 94)
 
 [node name="SpawnPoint2" type="Marker2D" parent="SpawnPoints" groups=["spawn_point"]]
 position = Vector2(124, 98)
+
+[connection signal="body_entered" from="KillBox" to="." method="_on_kill_box_body_entered"]
