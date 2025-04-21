@@ -13,6 +13,7 @@ const DASH_DURATION = 0.15
 const AIR_DASH_SPEED = 450.0
 const AIR_UPWARD_DASH_MULTIPLIER = 0.8
 
+var original_spawn_position: Vector2
 var gravity
 var ledge_grab_count = 0  
 var is_grabbing_wall = false
@@ -29,11 +30,10 @@ var dash_timer = 0.0
 var dash_direction = Vector2.ZERO
 var can_air_dash = true
 
-
 @onready var ledge_check_left = $LedgeCheckRayLeft
 @onready var ledge_check_right = $LedgeCheckRayRight
-@onready var collision_shape = $CollisionShape2D  
-
+@onready var collision_shape = $CollisionShape2D
+@onready var animated_sprite = $AnimatedSprite2D
 
 func _ready():
 	gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -50,7 +50,6 @@ func _physics_process(delta):
 		if dash_timer <= 0:
 			is_dashing = false
 	else:
-
 		if is_grabbing_wall:
 			handle_wall_hang()
 			wall_grab_timer += delta
@@ -59,11 +58,6 @@ func _physics_process(delta):
 		else:
 			get_input()
 			apply_gravity(delta)
-
-		get_input(delta)
-		apply_gravity(delta)
-
-
 
 	handle_wall_grab()
 	move_and_slide()
@@ -77,15 +71,58 @@ func _physics_process(delta):
 		wall_grab_timer = 0.0
 		wall_grab_delay_timer = 0.0
 
+func respawn():
+	# Move to spawn point first
+	position = original_spawn_position
+	velocity = Vector2.ZERO
+	move_and_slide()  # Ensure immediate repositioning logic takes effect
+
+	# Hide and disable player
+	visible = false
+	set_physics_process(false)
+	set_collision_layer(0)
+	set_collision_mask(0)
+
+	# Wait 2 seconds while hidden
+	await get_tree().create_timer(2.0).timeout
+
+	# Start flashing for 3 seconds
+	var flash_time = 3.0
+	var flash_interval = 0.2
+	var timer = 0.0
+
+	set_physics_process(true)
+	set_collision_layer(1)
+	set_collision_mask(1)
+
+	while timer < flash_time:
+		visible = true
+		modulate.a = 0.3  # Semi-transparent
+		await get_tree().create_timer(flash_interval / 2).timeout
+		modulate.a = 1.0  # Fully visible
+		await get_tree().create_timer(flash_interval / 2).timeout
+		timer += flash_interval
+
+	# Finish flashing
+	modulate.a = 1.0
+	visible = true
+
 func get_input():
 	var direction = 0
-	if Input.is_action_pressed("Left"):
+	if Input.is_action_pressed("LeftP2"):
 		direction = -1
-	elif Input.is_action_pressed("Right"):
+	elif Input.is_action_pressed("RightP2"):
 		direction = 1
 	velocity.x = direction * SPEED
 
-	if Input.is_action_just_pressed("Jump"):
+	# Walking animation
+	if direction != 0:
+		animated_sprite.play("Walk")
+		animated_sprite.flip_h = direction < 0
+	else:
+		animated_sprite.stop()
+
+	if Input.is_action_just_pressed("JumpP2"):
 		if is_grabbing_wall:
 			release_wall()
 			velocity.y = JUMP_VELOCITY
@@ -96,23 +133,23 @@ func get_input():
 			velocity.y = JUMP_VELOCITY
 			can_double_jump = false
 
-	if Input.is_action_pressed("Down") and not is_on_floor():
+	if Input.is_action_pressed("DownP2") and not is_on_floor():
 		is_fast_falling = true
 	else:
 		is_fast_falling = false  
 
-	if Input.is_action_just_pressed("Down") and is_on_floor():
+	if Input.is_action_just_pressed("DownP2") and is_on_floor():
 		var collision = get_last_slide_collision()
 		if collision and collision.get_collider() and collision.get_collider().is_in_group("one_way_platform"):
 			drop_through_platform()
 
 	# DASH INPUT
-	if Input.is_action_just_pressed("Dash") and not is_dashing:
+	if Input.is_action_just_pressed("DashP2") and not is_dashing:
 		var dash_vec = Vector2.ZERO
-		var left = Input.is_action_pressed("Left")
-		var right = Input.is_action_pressed("Right")
-		var up = Input.is_action_pressed("Up")
-		var down = Input.is_action_pressed("Down")
+		var left = Input.is_action_pressed("LeftP2")
+		var right = Input.is_action_pressed("RightP2")
+		var up = Input.is_action_pressed("UpP2")
+		var down = Input.is_action_pressed("DownP2")
 
 		if is_on_floor():
 			if left:
@@ -173,7 +210,7 @@ func handle_wall_grab():
 	var can_grab_left = ledge_check_left.is_colliding()
 	var can_grab_right = ledge_check_right.is_colliding()
 
-	if (can_grab_left and Input.is_action_pressed("Left")) or (can_grab_right and Input.is_action_pressed("Right")):
+	if (can_grab_left and Input.is_action_pressed("LeftP2")) or (can_grab_right and Input.is_action_pressed("RightP2")):
 		is_grabbing_wall = true
 		velocity = Vector2.ZERO
 		wall_position = position
@@ -185,12 +222,12 @@ func handle_wall_grab():
 func handle_wall_hang():
 	velocity = Vector2.ZERO
 
-	if Input.is_action_just_pressed("Jump"):
+	if Input.is_action_just_pressed("JumpP2"):
 		release_wall()
 		velocity.y = JUMP_VELOCITY
 		ledge_grab_cooldown_timer = LEDGE_GRAB_COOLDOWN
 
-	if Input.is_action_just_pressed("Left") or Input.is_action_just_pressed("Right"):
+	if Input.is_action_just_pressed("LeftP2") or Input.is_action_just_pressed("RightP2"):
 		release_wall()
 		ledge_grab_cooldown_timer = LEDGE_GRAB_COOLDOWN
 
