@@ -29,6 +29,14 @@ var dash_timer = 0.0
 var dash_direction = Vector2.ZERO
 var can_air_dash = true
 
+var combos = {"3 hit combo" : ["Light", "Light", "Light"], ""}
+# Buffer to store recent inputs
+var input_buffer = []
+var buffer_time = 0.5 # seconds
+var max_buffer = 10
+var input_timer = 0.0
+var combo_actions = { "3 hit combo": "Light_Attack"}
+
 @onready var ledge_check_left = $LedgeCheckRayLeft
 @onready var ledge_check_right = $LedgeCheckRayRight
 @onready var collision_shape = $CollisionShape2D
@@ -198,3 +206,47 @@ func release_wall():
 	is_grabbing_wall = false
 	wall_grab_timer = 0.0
 	wall_grab_delay_timer = WALL_GRAB_DELAY
+
+
+func _process(delta):
+	handle_input()
+	input_timer += delta
+	if input_timer > buffer_time:
+		if input_buffer.size() > 0:
+			input_buffer.pop_front()
+		input_timer = 0.0
+
+func handle_input():
+	# Map input to strings
+	if Input.is_action_just_pressed("Light"):
+		register_input("Light")
+	if Input.is_action_just_pressed("Medium"):
+		register_input("Medium")
+
+func register_input(input):
+	input_buffer.append(input)
+	if input_buffer.size() > max_buffer:
+		input_buffer.pop_front()
+	check_combos()
+
+func check_combos():
+	for name in combos.keys():
+		var sequence = combos[name]
+		if is_combo_match(sequence):
+			print("Combo matched: ", name)
+			perform_combo(name)
+			input_buffer.clear() # Reset after successful combo
+			break
+
+func is_combo_match(sequence):
+	if input_buffer.size() < sequence.size():
+		return false
+	for i in range(sequence.size()):
+		if input_buffer[input_buffer.size() - sequence.size() + i] != sequence[i]:
+			return false
+		return true
+
+func perform_combo(combo_name):
+	var action = combo_actions.get(combo_name, null)
+	if action:
+		$AnimatedSprite2D.play("Light_Attack")

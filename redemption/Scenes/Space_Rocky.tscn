@@ -1,17 +1,17 @@
 [gd_scene load_steps=16 format=3 uid="uid://pulekot0sums"]
 
 [ext_resource type="Script" path="res://Scripts/space_rocky.gd" id="1_j1cv2"]
-[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab1and5.png" id="2_beiti"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking1.png" id="2_xtx5q"]
-[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab2and4.png" id="3_ayruq"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking2.png" id="3_c8vdi"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking3.png" id="4_boipv"]
-[ext_resource type="Texture2D" path="res://Sprites/SpaceRockyJab3.png" id="4_v80st"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking4.png" id="5_vsb75"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking5.png" id="6_p0y4a"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking6.png" id="7_hh414"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking7.png" id="8_k5gs3"]
-[ext_resource type="Texture2D" path="res://Sprites/Space RockyWalking8.png" id="9_in82x"]
+[ext_resource type="Texture2D" uid="uid://csv20cl7aorto" path="res://Sprites/SpaceRockyJab1and5.png" id="2_beiti"]
+[ext_resource type="Texture2D" uid="uid://dh41u2n8sego2" path="res://Sprites/Space RockyWalking1.png" id="2_xtx5q"]
+[ext_resource type="Texture2D" uid="uid://bdqo1ixpln7fk" path="res://Sprites/SpaceRockyJab2and4.png" id="3_ayruq"]
+[ext_resource type="Texture2D" uid="uid://dw2f8itkmkkvn" path="res://Sprites/Space RockyWalking2.png" id="3_c8vdi"]
+[ext_resource type="Texture2D" uid="uid://c7vtp7m8audfq" path="res://Sprites/Space RockyWalking3.png" id="4_boipv"]
+[ext_resource type="Texture2D" uid="uid://bqugb8f0tfpwi" path="res://Sprites/SpaceRockyJab3.png" id="4_v80st"]
+[ext_resource type="Texture2D" uid="uid://dbmsdhgcvq2y4" path="res://Sprites/Space RockyWalking4.png" id="5_vsb75"]
+[ext_resource type="Texture2D" uid="uid://c32if6dv7s28w" path="res://Sprites/Space RockyWalking5.png" id="6_p0y4a"]
+[ext_resource type="Texture2D" uid="uid://dsuycfe5yxosm" path="res://Sprites/Space RockyWalking6.png" id="7_hh414"]
+[ext_resource type="Texture2D" uid="uid://x1bwhiesuvtv" path="res://Sprites/Space RockyWalking7.png" id="8_k5gs3"]
+[ext_resource type="Texture2D" uid="uid://c2gbrnc4tywoc" path="res://Sprites/Space RockyWalking8.png" id="9_in82x"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_i2p2i"]
 animations = [{
@@ -32,7 +32,7 @@ animations = [{
 "texture": ExtResource("2_beiti")
 }],
 "loop": true,
-"name": &"Light",
+"name": &"Light_Attack",
 "speed": 5.0
 }, {
 "frames": [{
@@ -88,8 +88,7 @@ script = ExtResource("1_j1cv2")
 position = Vector2(2, -6)
 scale = Vector2(0.19401, 0.146484)
 sprite_frames = SubResource("SpriteFrames_i2p2i")
-animation = &"Light"
-frame_progress = 0.85838
+animation = &"Light_Attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_dl023")

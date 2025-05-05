@@ -60,7 +60,7 @@ func _physics_process(delta):
 			get_input()
 			apply_gravity(delta)
 
-		get_input(delta)
+		get_input()
 		apply_gravity(delta)
 
 
@@ -198,3 +198,7 @@ func release_wall():
 	is_grabbing_wall = false
 	wall_grab_timer = 0.0
 	wall_grab_delay_timer = WALL_GRAB_DELAY
+
+#Input manager.
+#if Input.is_action_just_pressed("Light"):
+	#pass
