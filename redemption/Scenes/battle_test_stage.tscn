@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cfsayq422noao"]
+[gd_scene load_steps=9 format=3 uid="uid://cfsayq422noao"]
 
-[ext_resource type="PackedScene" uid="uid://pulekot0sums" path="res://Scenes/Space_Rocky.tscn" id="1_bhcms"]
-[ext_resource type="Script" path="res://Scenes/platforms.gd" id="1_q6ac6"]
+[ext_resource type="Script" path="res://Scripts/battle_test_stage.gd" id="1_nn5em"]
+[ext_resource type="Script" path="res://Scripts/platforms.gd" id="1_q6ac6"]
+[ext_resource type="PackedScene" uid="uid://l723qeajvgur" path="res://Scenes/Space_RockyP1.tscn" id="2_t434n"]
+[ext_resource type="PackedScene" uid="uid://ctngymni3xla7" path="res://Scenes/space_rockyP2.tscn" id="3_gb45c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_20c23"]
 size = Vector2(134, 11)
@@ -9,31 +11,45 @@ size = Vector2(134, 11)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oh8el"]
 size = Vector2(597.5, 278.75)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5o30"]
+size = Vector2(1694, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pdp8a"]
+size = Vector2(8, 983)
+
 [node name="Battle Test Stage" type="Node2D"]
+position = Vector2(96, 78)
+script = ExtResource("1_nn5em")
+player_1_scene = ExtResource("2_t434n")
+player_2_scene = ExtResource("3_gb45c")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = 254.0
 offset_top = 369.0
 offset_right = 850.0
 offset_bottom = 648.0
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="."]
 offset_left = 320.0
 offset_top = 283.0
 offset_right = 454.0
 offset_bottom = 294.0
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect3" type="ColorRect" parent="."]
 offset_left = 639.0
 offset_top = 283.0
 offset_right = 774.0
 offset_bottom = 294.0
+metadata/_edit_use_anchors_ = true
 
 [node name="ColorRect4" type="ColorRect" parent="."]
 offset_left = 465.0
 offset_top = 201.0
 offset_right = 599.0
 offset_bottom = 212.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Platforms" type="StaticBody2D" parent="." groups=["one_way_platform"]]
 collision_layer = 2
@@ -55,15 +71,38 @@ visibility_layer = 2
 position = Vector2(532, 207)
 shape = SubResource("RectangleShape2D_20c23")
 
-[node name="Space Rocky" parent="." instance=ExtResource("1_bhcms")]
-position = Vector2(517, 80)
-
-
-
-
 [node name="ground" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ground"]
 position = Vector2(551.25, 508.25)
 shape = SubResource("RectangleShape2D_oh8el")
 
+[node name="KillBox" type="Area2D" parent="."]
+position = Vector2(18, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillBox"]
+position = Vector2(532, -198)
+shape = SubResource("RectangleShape2D_s5o30")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="KillBox"]
+position = Vector2(532, 777)
+shape = SubResource("RectangleShape2D_s5o30")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="KillBox"]
+position = Vector2(-311, 289.5)
+shape = SubResource("RectangleShape2D_pdp8a")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="KillBox"]
+position = Vector2(1375, 289)
+shape = SubResource("RectangleShape2D_pdp8a")
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+position = Vector2(473, 239)
+
+[node name="SpawnPoint1" type="Marker2D" parent="SpawnPoints" groups=["spawn_point"]]
+position = Vector2(-185, 94)
+
+[node name="SpawnPoint2" type="Marker2D" parent="SpawnPoints" groups=["spawn_point"]]
+position = Vector2(124, 98)
+
+[connection signal="body_entered" from="KillBox" to="." method="_on_kill_box_body_entered"]

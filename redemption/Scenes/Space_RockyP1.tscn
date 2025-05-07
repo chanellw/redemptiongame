@@ -1,0 +1,118 @@
+[gd_scene load_steps=13 format=3 uid="uid://l723qeajvgur"]
+
+[ext_resource type="Script" path="res://Scripts/space_rockyP1.gd" id="1_ue0br"]
+[ext_resource type="Texture2D" uid="uid://voumxfhmo48a" path="res://Sprites/Space RockyWalking1.png" id="2_u0w03"]
+[ext_resource type="Texture2D" uid="uid://c6ftwpj6i65lg" path="res://Sprites/Space RockyWalking2.png" id="3_3sc5q"]
+[ext_resource type="Texture2D" uid="uid://dnqgr8tbm8oty" path="res://Sprites/Space RockyWalking3.png" id="4_bxuyj"]
+[ext_resource type="Texture2D" uid="uid://b2fm7vy4lj6ub" path="res://Sprites/Space RockyWalking4.png" id="5_ob6sg"]
+[ext_resource type="Texture2D" uid="uid://dpictokgy3okc" path="res://Sprites/Space RockyWalking5.png" id="6_sfgit"]
+[ext_resource type="Texture2D" uid="uid://cx73vn3o4fsk5" path="res://Sprites/Space RockyWalking6.png" id="7_5faly"]
+[ext_resource type="Texture2D" uid="uid://l8nlg8jgbhwq" path="res://Sprites/Space RockyWalking7.png" id="8_mgq34"]
+[ext_resource type="Texture2D" uid="uid://mowpxt1bu15c" path="res://Sprites/Space RockyWalking8.png" id="9_wq6dw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i2p2i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": true,
+"name": &"Light",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_u0w03")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_3sc5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bxuyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ob6sg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_sfgit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_5faly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_mgq34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_wq6dw")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_u0w03")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dl023"]
+radius = 8.0
+height = 38.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m5vmj"]
+size = Vector2(16, 3.5)
+
+[node name="Space Rocky" type="CharacterBody2D"]
+collision_mask = 3
+script = ExtResource("1_ue0br")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, -6)
+scale = Vector2(0.19401, 0.146484)
+sprite_frames = SubResource("SpriteFrames_i2p2i")
+animation = &"Walk"
+frame = 6
+frame_progress = 0.178974
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_dl023")
+
+[node name="LedgeCheckRayLeft" type="RayCast2D" parent="."]
+position = Vector2(-8, -10)
+target_position = Vector2(-5, -8)
+
+[node name="LedgeCheckRayRight" type="RayCast2D" parent="."]
+position = Vector2(8, -10)
+target_position = Vector2(5, -8)
+
+[node name="PlatformCheck" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 3
+
+[node name="PlatformChecking" type="CollisionShape2D" parent="PlatformCheck"]
+position = Vector2(0, 18.25)
+shape = SubResource("RectangleShape2D_m5vmj")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -5.0
+offset_top = -28.0
+offset_right = 4.0
+offset_bottom = -22.0
+color = Color(1, 0, 0, 0.47451)
+
+[connection signal="body_entered" from="PlatformCheck" to="." method="_on_platform_check_body_entered"]
